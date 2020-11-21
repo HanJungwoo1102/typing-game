@@ -3,20 +3,12 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   entry: './src/index.ts',
-  output: {
-    path: path.resolve(__dirname, 'public'),
-    filename: 'bundle.js'
-  },
-  devServer: {
-    contentBase: path.resolve(__dirname, "./public"),
-    index: "index.html",
-    port: 1102,
-  },
   module: {
     rules: [
       {
-        test: /\\.ts$/,
+        test: /\.ts$/,
         use: 'ts-loader',
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/,
@@ -29,4 +21,18 @@ module.exports = {
       template: "src/index.html",
     }),
   ],
+  resolve: {
+    extensions: [ '.ts', '.js'],
+    alias: {
+    },
+  },
+  output: {
+    path: path.resolve(__dirname, 'public'),
+    filename: 'bundle.js'
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, "./public"),
+    index: "index.html",
+    port: 1102,
+  },
 };
