@@ -14,10 +14,12 @@ class State {
   private changeScoreView;
   private toggleButtonView;
   private routeToResult;
+  private toggleButtonDisabled;
 
   constructor({
     problems, result,
-    changeProblemTextView, changeTimeView, changeScoreView, toggleButtonView,
+    changeProblemTextView, changeTimeView, changeScoreView,
+    toggleButtonView, toggleButtonDisabled,
     routeToResult,
   }: {
     problems: Problem[];
@@ -26,6 +28,7 @@ class State {
     changeTimeView: (time: number) => void;
     changeScoreView: (score: number) => void;
     toggleButtonView: (isShownStartButton: boolean) => void;
+    toggleButtonDisabled: (isButtonDisabled: boolean) => void;
     routeToResult: () => void;
   }) {
     this.problems = problems;
@@ -35,18 +38,26 @@ class State {
     this.changeScoreView = changeScoreView;
     this.toggleButtonView = toggleButtonView;
     this.routeToResult = routeToResult;
+    this.toggleButtonDisabled = toggleButtonDisabled;
   }
 
-  onClickStartButton = () => {
-    this.startGame();
+  onClickStartButton() {
+    if (this.problems.length > 0) {
+      this.toggleButtonDisabled(false);
+      this.result.initialize();
+      this.initializeScore();
+      this.toggleButtonView(false);
+      this.startProblem(0);
+    }
   }
 
-  onClickInitializeButton = () => {
+  onClickInitializeButton() {
     clearInterval(this.intervalId);
     this.toggleButtonView(true);
+    this.toggleButtonDisabled(true);
   }
 
-  onEnter = (input: string) => {
+  onEnter(input: string) {
     const problem = this.problems[this.currentProblemIndex];
     if (problem.text === input) {
       this.result.add(problem, this.count);
@@ -59,22 +70,13 @@ class State {
     }
   }
 
-  private onTimeOut = () => {
+  private onTimeOut() {
     clearInterval(this.intervalId);
     this.changeScore(this.score - 1);
     if (this.currentProblemIndex + 1 < this.problems.length) {
       this.startProblem(this.currentProblemIndex + 1);
     } else {
       this.finish();
-    }
-  }
-
-  private startGame() {
-    if (this.problems.length > 0) {
-      this.result.initialize();
-      this.initializeScore();
-      this.startProblem(0);
-      this.toggleButtonView(false);
     }
   }
 

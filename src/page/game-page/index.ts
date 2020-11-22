@@ -2,7 +2,7 @@ import History from "router/history";
 import Problem from "../../lib/models/problem";
 import Result from "../../lib/Result";
 import State from "./state";
-import  build from './build';
+import build from './build';
 
 const createGamePageElement = ({ history }: {
   history: History;
@@ -15,6 +15,7 @@ const createGamePageElement = ({ history }: {
   const scoreElement = document.createElement('span');
   const startButtonElement = document.createElement('button');
   const initializeButtonElement = document.createElement('button');
+  const inputElement = document.createElement('input');
 
   const state = new State({
     problems,
@@ -32,6 +33,13 @@ const createGamePageElement = ({ history }: {
         initializeButtonElement.classList.toggle(hideClassName);
       }
     },
+    toggleButtonDisabled: (isButtonDisabled: boolean) => {
+      if (isButtonDisabled) {
+        inputElement.setAttribute('disabled', '')
+      } else {
+        inputElement.removeAttribute('disabled');
+      }
+    },
     routeToResult: () => history.push('result'),
   });
 
@@ -41,6 +49,7 @@ const createGamePageElement = ({ history }: {
     scoreElement,
     startButtonElement,
     initializeButtonElement,
+    inputElement,
     onClickStartButton: () => state.onClickStartButton(),
     onClickInitializeButton: () => state.onClickInitializeButton(),
     onEnter: (input: string) => state.onEnter(input),

@@ -2,6 +2,7 @@ import './index.css';
 
 const build = ({
   problemTextElement, timeElement, scoreElement, startButtonElement, initializeButtonElement,
+  inputElement,
   onEnter, onClickInitializeButton, onClickStartButton,
 }: {
   problemTextElement: HTMLElement;
@@ -9,6 +10,7 @@ const build = ({
   scoreElement: HTMLElement;
   startButtonElement: HTMLElement;
   initializeButtonElement: HTMLElement;
+  inputElement: HTMLInputElement;
   onClickStartButton: () => void;
   onClickInitializeButton: () => void;
   onEnter: (input: string) => void;
@@ -32,8 +34,8 @@ const build = ({
   const problemContainer = document.createElement('section');
   
   problemTextElement.append('문제 단어');
-  const inputElement = document.createElement('input');
   inputElement.setAttribute('type', 'text');
+  inputElement.setAttribute('disabled', '');
   inputElement.addEventListener('keyup', function (event) {
     if (event.code === 'Enter') {
       onEnter(this.value);
