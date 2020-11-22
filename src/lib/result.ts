@@ -1,4 +1,4 @@
-import Problem from "./models/problem";
+import Problem from "./problem";
 
 class Result {
   private result: number[];
@@ -8,7 +8,7 @@ class Result {
   }
 
   add(proble: Problem, time: number) {
-    this.result.push(proble.second - time);
+    this.result.push(proble.getSecond() - time);
   }
 
   initialize() {

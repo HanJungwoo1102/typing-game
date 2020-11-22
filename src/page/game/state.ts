@@ -1,20 +1,22 @@
-import Problem from "../../lib/models/problem";
+import Score from "../../lib/score";
+import Game from "../../lib/game";
+import Problem from "../../lib/problem";
 import Result from "../../lib/Result";
+import Counter from "../../lib/counter";
 
 class State {
-  private count: number;
+  private counter: Counter;
   private intervalId: NodeJS.Timeout;
-  private problems: Problem[];
-  private currentProblemIndex: number;
-  private score: number;
+  private score: Score;
   private result: Result;
+  private game: Game;
   
   private changeProblemTextView;
   private changeTimeView;
   private changeScoreView;
   private toggleButtonView;
-  private routeToResult;
   private toggleButtonDisabled;
+  private routeToResult;
 
   constructor({
     problems, result,
@@ -31,8 +33,10 @@ class State {
     toggleButtonDisabled: (isButtonDisabled: boolean) => void;
     routeToResult: () => void;
   }) {
-    this.problems = problems;
+    this.game = new Game({ problems })
     this.result = result;
+    this.score = new Score({ score: problems.length });
+    this.counter = new Counter();
     this.changeProblemTextView = changeProblemTextView;
     this.changeTimeView = changeTimeView;
     this.changeScoreView = changeScoreView;
@@ -42,13 +46,11 @@ class State {
   }
 
   onClickStartButton() {
-    if (this.problems.length > 0) {
-      this.toggleButtonDisabled(false);
-      this.result.initialize();
-      this.initializeScore();
-      this.toggleButtonView(false);
-      this.startProblem(0);
-    }
+    this.toggleButtonDisabled(false);
+    this.result.initialize();
+    this.initializeScore();
+    this.toggleButtonView(false);
+    this.startNextProblem();
   }
 
   onClickInitializeButton() {
@@ -56,15 +58,15 @@ class State {
     this.toggleButtonView(true);
     this.toggleButtonDisabled(true);
     this.changeProblemTextView('문제 단어');
+    this.game.initialize();
   }
 
   onEnter(input: string) {
-    const problem = this.problems[this.currentProblemIndex];
-    if (problem.text === input) {
-      this.result.add(problem, this.count);
+    if (this.game.isRight(input)) {
+      this.result.add(this.game.getCurrentProblem(), this.counter.getCount());
       clearInterval(this.intervalId);
-      if (this.currentProblemIndex + 1 < this.problems.length) {
-        this.startProblem(this.currentProblemIndex + 1);
+      if (this.game.hasNextProblem()) {
+        this.startNextProblem();
       } else {
         this.finish();
       }
@@ -73,28 +75,28 @@ class State {
 
   private onTimeOut() {
     clearInterval(this.intervalId);
-    this.changeScore(this.score - 1);
-    if (this.currentProblemIndex + 1 < this.problems.length) {
-      this.startProblem(this.currentProblemIndex + 1);
+    this.downScore();
+    if (this.game.hasNextProblem()) {
+      this.startNextProblem();
     } else {
       this.finish();
     }
   }
 
-  private startProblem(index: number) {
-    this.currentProblemIndex = index;
-    const problem = this.problems[this.currentProblemIndex];
-    this.startTimer(problem.second);
-    this.changeProblemTextView(problem.text);
+  private startNextProblem() {
+    this.game.nextProblem();
+    const problem = this.game.getCurrentProblem();
+    this.startTimer(problem.getSecond());
+    this.changeProblemTextView(problem.getText());
   }
 
   private startTimer(count: number) {
-    this.changeTimeCount(count);
+    this.initializeCount(count);
     this.intervalId = setInterval(() => {
-      if (this.count > 0) {
-        this.changeTimeCount(this.count - 1);
-      } else {
+      if (this.counter.isEnd()) {
         this.onTimeOut();
+      } else {
+        this.downCount();
       }
     }, 1000);
   }
@@ -104,16 +106,22 @@ class State {
   }
 
   private initializeScore() {
-    this.changeScore(this.problems.length);
+    this.score.initialize();
+    this.changeScoreView(this.score.getScore());
   }
 
-  private changeScore(score: number) {
-    this.score = score;
-    this.changeScoreView(score);
+  private downScore() {
+    this.score.wrong();
+    this.changeScoreView(this.score.getScore());
   }
 
-  private changeTimeCount(count: number) {
-    this.count = count;
+  private downCount() {
+    this.counter.countDown();
+    this.changeTimeView(this.counter.getCount());
+  }
+
+  private initializeCount(count: number) {
+    this.counter.setCount(count);
     this.changeTimeView(count);
   }
 }
