@@ -86,8 +86,8 @@ class State {
   private startNextProblem() {
     this.game.nextProblem();
     const problem = this.game.getCurrentProblem();
-    this.startTimer(problem.getSecond());
     this.changeProblemTextView(problem.getText());
+    this.startTimer(problem.getSecond());
   }
 
   private startTimer(count: number) {
@@ -115,14 +115,14 @@ class State {
     this.changeScoreView(this.score.getScore());
   }
 
-  private downCount() {
-    this.counter.countDown();
-    this.changeTimeView(this.counter.getCount());
-  }
-
   private initializeCount(count: number) {
     this.counter.setCount(count);
     this.changeTimeView(count);
+  }
+
+  private downCount() {
+    this.counter.countDown();
+    this.changeTimeView(this.counter.getCount());
   }
 }
 
