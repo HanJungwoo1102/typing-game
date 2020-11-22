@@ -3,7 +3,7 @@ import History from "./history";
 abstract class Page {
   protected history: History;
 
-  setHistory({ history }: { history: History }) {
+  setHistory(history: History) {
     this.history = history;
   }
   

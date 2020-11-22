@@ -1,0 +1,21 @@
+.game-page .container {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.game-page header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.game-page section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-page button.hide {
+  display: none;
+}

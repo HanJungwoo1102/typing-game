@@ -1,6 +1,6 @@
-interface Propblem {
+interface Problem {
   second: number;
   text: string;
 }
 
-export default Propblem;
+export default Problem;

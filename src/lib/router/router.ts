@@ -1,51 +1,46 @@
 import History from "./history";
-import Page from "./page";
-import RouteMap from "./route-map";
+import Route from "./route";
 
-export abstract class Router {
+class Router {
   private rootElement: HTMLElement;
   protected history: History;
-  private pages: RouteMap;
+  private routeList: Route[];
 
-  constructor(rootElement: HTMLElement) {
+  constructor(rootElement: HTMLElement, routeList: Route[], initialPath: string) {
     this.rootElement = rootElement;
-    this.pages = new RouteMap();
     this.history = new History({
       onPushed: this.onPushedHistory,
       onPoped: this.onPopedHistory,
     });
+    this.routeList = routeList;
+
+    this.history.push(initialPath);
   }
 
   private onPushedHistory = (path: string) => {
-    const page = this.pages.getPage(path);
-
-    if (page) {
-      this.renderPage(page); 
+    const route = this.routeList.find(route => route.getPath() === path);
+    if (route) {
+      this.render(route);
     }
   }
 
   private onPopedHistory = (path: string) => {
-    const page = this.pages.getPage(path);
-
-    if (page) {
-      this.renderPage(page);
+    const route = this.routeList.find(route => route.getPath() === path);
+  
+    if (route) {
+      this.render(route);
     }
   }
 
-  private renderPage(page: Page) {
+  private render(route: Route) {
     const rootElement = this.rootElement;
+    rootElement.innerText = '';
+    const page = route.getPage()
   
+    page.setHistory(this.history);
+
     rootElement.appendChild(page.render());
-    page.onRendered();
   }
-
-  start(path: string) {
-    const pages = this.route();
-
-    this.pages.setPages(pages);
-
-    this.history.push(path);
-  }
-
-  protected abstract route(): { path: string, page: Page }[];
 }
+
+export default Router;
