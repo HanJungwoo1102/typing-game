@@ -24,6 +24,8 @@ module.exports = {
   resolve: {
     extensions: [ '.ts', '.js'],
     alias: {
+      page: path.resolve(__dirname, "./src/page/"),
+      router: path.resolve(__dirname, "./src/lib/router/")
     },
   },
   output: {
