@@ -1,8 +1,8 @@
-import Score from "../../lib/score";
-import Game from "../../lib/game";
-import Problem from "../../lib/problem";
-import Result from "../../lib/Result";
-import Counter from "../../lib/counter";
+import Score from "lib/score";
+import Game from "lib/game";
+import Problem from "lib/problem";
+import Result from "lib/Result";
+import Counter from "lib/counter";
 
 class State {
   private counter: Counter;
