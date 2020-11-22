@@ -1,36 +1,20 @@
-import Page from "router/page";
-import View from './view';
+import History from "router/history";
+import build from "./build";
 
-class ResultPage extends Page {
-  private view: View;
-  private avgTime;
-  private score;
+const createResultPageElement =  ({ history }: {
+  history: History
+}) => ({ avgTime, score }: {
+  avgTime: number;
+  score: number;
+}) => {
 
-  constructor({ avgTime, score }: {
-    avgTime: number;
-    score: number;
-  }) {
-    super();
-    this.view = new View();
-    this.avgTime = avgTime;
-    this.score = score;
-  }
+  const rootElement = build({
+    avgTime,
+    score,
+    onClickRestartButton: () => history.push('game'),
+  });
 
-  onRendered() {
-
-  }
-
-  render() {
-    return this.view.createRootElement({
-      avgTime: this.avgTime,
-      score: this.score,
-      onClickRestartButton: this.onClickRestartButton,
-    });
-  }
-
-  onClickRestartButton = () => {
-    this.history.push('game');
-  }
+  return rootElement;
 }
 
-export default ResultPage;
+export default createResultPageElement;

@@ -1,20 +1,19 @@
-import Page from "./page";
+import History from "./history";
 
 class Route {
   private path: string;
+  createElement;
 
-  constructor({ path, getPage }:{
-    path: string, getPage: () => Page,
+  constructor({ path, createElement }:{
+    path: string, createElement: (props:{ history: History }) => HTMLElement,
   }) {
     this.path = path;
-    this.getPage = getPage;
+    this.createElement = createElement;
   }
 
   getPath() {
     return this.path;
   }
-
-  getPage: () => Page;
 }
 
 export default Route;

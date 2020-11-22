@@ -1,10 +1,10 @@
 import Router from "router/router";
 import Route from "router/route";
-import GamePage from "page/game-page";
-import ResultPage from "page/result-page";
 import fetchWords from "../lib/fetch/fetch-words";
 import Problem from "../lib/models/problem";
 import Result from "../lib/Result";
+import createGamePageElement from "page/game-page";
+import createResultPageElement from "page/result-page";
 
 class App {
   constructor() {
@@ -22,17 +22,14 @@ class App {
         [
           new Route({
             path: 'game',
-            getPage: () => {
-              result.initialize();
-              return new GamePage({
-                problems,
-                result,
-              })
-            },
+            createElement: ({ history }) => createGamePageElement({ history })({
+              problems,
+              result,
+            }),
           }),
           new Route({
             path: 'result',
-            getPage: () => new ResultPage({
+            createElement: ({ history }) => createResultPageElement({ history })({
               avgTime: result.getAvgTime(),
               score: result.getScore(),
             }),

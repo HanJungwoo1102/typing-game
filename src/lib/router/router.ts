@@ -35,11 +35,12 @@ class Router {
   private render(route: Route) {
     const rootElement = this.rootElement;
     rootElement.innerText = '';
-    const page = route.getPage()
+    
+    const element = route.createElement({
+      history: this.history,
+    })
   
-    page.setHistory(this.history);
-
-    rootElement.appendChild(page.render());
+    rootElement.appendChild(element);
   }
 }
 
