@@ -1,6 +1,6 @@
-import History from "router/history";
-import Problem from "../../lib/problem";
-import Result from "../../lib/Result";
+import History from "lib/router/history";
+import Problem from "lib/problem";
+import Result from "lib/Result";
 import State from "./state";
 import build from './build';
 

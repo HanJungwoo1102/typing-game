@@ -11,7 +11,7 @@
     "baseUrl": ".",
     "paths": {
       "page/*": ["src/page/*"],
-      "router/*": ["src/lib/router/*"]
+      "lib/*": ["src/lib/*"],
     }
   }
 }

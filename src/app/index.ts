@@ -1,8 +1,8 @@
-import Router from "router/router";
-import Route from "router/route";
-import fetchProblems from "../lib/fetch/fetch-problems";
-import Problem from "../lib/problem";
-import Result from "../lib/Result";
+import Router from "lib/router/router";
+import Route from "lib/router/route";
+import fetchProblems from "lib/fetch/fetch-problems";
+import Problem from "lib/problem";
+import Result from "lib/Result";
 import createGamePageElement from "page/game";
 import createResultPageElement from "page/result";
 

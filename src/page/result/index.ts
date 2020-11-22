@@ -1,4 +1,4 @@
-import History from "router/history";
+import History from "lib/router/history";
 import build from "./build";
 
 const createResultPageElement =  ({ history }: {
