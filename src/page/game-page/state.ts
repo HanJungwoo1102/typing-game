@@ -55,6 +55,7 @@ class State {
     clearInterval(this.intervalId);
     this.toggleButtonView(true);
     this.toggleButtonDisabled(true);
+    this.changeProblemTextView('문제 단어');
   }
 
   onEnter(input: string) {

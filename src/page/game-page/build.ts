@@ -16,7 +16,8 @@ const build = ({
   onEnter: (input: string) => void;
 }) => {
   const rootElement = document.createElement('main');
-  rootElement.classList.add('game-page')
+  rootElement.classList.add('game-page');
+  rootElement.classList.add('fade-in');
 
   const containerElement = document.createElement('div');
   containerElement.classList.add('container')
@@ -43,11 +44,14 @@ const build = ({
     }
   });
   inputElement.setAttribute('placeholder', '입력');
+  inputElement.classList.add('basic-input');
   startButtonElement.append('시작');
   startButtonElement.addEventListener('click', onClickStartButton);
+  startButtonElement.classList.add('basic-button');
   initializeButtonElement.append('초기화');
   initializeButtonElement.addEventListener('click', onClickInitializeButton);
   initializeButtonElement.classList.add('hide');
+  initializeButtonElement.classList.add('basic-button');
 
   headContainer.appendChild(timerElement);
   headContainer.appendChild(scoreBoardElement);

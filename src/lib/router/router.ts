@@ -6,30 +6,34 @@ class Router {
   protected history: History;
   private routeList: Route[];
 
-  constructor(rootElement: HTMLElement, routeList: Route[], initialPath: string) {
+  constructor(rootElement: HTMLElement, routeList: Route[], initialRoutePath: string) {
     this.rootElement = rootElement;
     this.history = new History({
-      onPushed: this.onPushedHistory,
-      onPoped: this.onPopedHistory,
+      onPushed: (path: string) => this.onPushedHistory(path),
+      onPoped: (path: string) => this.onPopedHistory(path),
     });
     this.routeList = routeList;
 
-    this.history.push(initialPath);
+    this.history.push(initialRoutePath);
   }
 
-  private onPushedHistory = (path: string) => {
-    const route = this.routeList.find(route => route.getPath() === path);
+  private onPushedHistory(path: string) {
+    const route = this.findRoute(path);
     if (route) {
       this.render(route);
     }
   }
 
-  private onPopedHistory = (path: string) => {
-    const route = this.routeList.find(route => route.getPath() === path);
+  private onPopedHistory(path: string) {
+    const route = this.findRoute(path);
   
     if (route) {
       this.render(route);
     }
+  }
+  
+  private findRoute(path: string) {
+    return this.routeList.find(route => route.getPath() === path);
   }
 
   private render(route: Route) {

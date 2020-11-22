@@ -12,32 +12,43 @@ class App {
   }
 
   private async startRouting() {
-    const problems: Problem[] = await fetchWords();
-    const result = new Result();
-    const rootElement = document.getElementById('root');
-
-    if (rootElement) {
-      new Router(
-        rootElement,
-        [
-          new Route({
-            path: 'game',
-            createElement: ({ history }) => createGamePageElement({ history })({
-              problems,
-              result,
-            }),
-          }),
-          new Route({
-            path: 'result',
-            createElement: ({ history }) => createResultPageElement({ history })({
-              avgTime: result.getAvgTime(),
-              score: result.getScore(),
-            }),
-          }),
-        ],
-        'game',
-      );
+    let problems: Problem[];
+  
+    try {
+      problems = await fetchWords();
+    } catch(error) {
+      alert('문제를 불러오는데 실패했습니다.');
+      console.error(error);
     }
+  
+    if (problems && problems.length > 0) {
+      const result = new Result();
+      const rootElement = document.getElementById('root');
+  
+      if (rootElement) {
+        new Router(
+          rootElement,
+          [
+            new Route({
+              path: 'game',
+              createElement: ({ history }) => createGamePageElement({ history })({
+                problems,
+                result,
+              }),
+            }),
+            new Route({
+              path: 'result',
+              createElement: ({ history }) => createResultPageElement({ history })({
+                avgTime: result.getAvgTime(),
+                score: result.getScore(),
+              }),
+            }),
+          ],
+          'game',
+        );
+      }
+    }
+
   }
 }
 

@@ -7,6 +7,7 @@ const build = ({ avgTime, score, onClickRestartButton }: {
 }) => {
   const rootElement = document.createElement('main');
   rootElement.classList.add('result-page');
+  rootElement.classList.add('fade-in');
 
   const containerElement =document.createElement('div');
   containerElement.classList.add('container');
@@ -20,6 +21,7 @@ const build = ({ avgTime, score, onClickRestartButton }: {
   const buttonElement = document.createElement('button');
   buttonElement.append('다시 시작');
   buttonElement.addEventListener('click', onClickRestartButton);
+  buttonElement.classList.add('basic-button');
 
   containerElement.appendChild(missioncompleteElement);
   containerElement.appendChild(scoreElement);
