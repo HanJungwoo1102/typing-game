@@ -1,20 +1,20 @@
-import Problem from "../../lib/models/problem";
-import Result from "../../lib/Result";
+import Game from "lib/game";
+import Problem from "lib/problem";
+import Result from "lib/Result";
+import Counter from "lib/counter";
 
 class State {
-  private count: number;
+  private counter: Counter;
   private intervalId: NodeJS.Timeout;
-  private problems: Problem[];
-  private currentProblemIndex: number;
-  private score: number;
   private result: Result;
+  private game: Game;
   
   private changeProblemTextView;
   private changeTimeView;
   private changeScoreView;
   private toggleButtonView;
-  private routeToResult;
   private toggleButtonDisabled;
+  private routeToResult;
 
   constructor({
     problems, result,
@@ -31,8 +31,9 @@ class State {
     toggleButtonDisabled: (isButtonDisabled: boolean) => void;
     routeToResult: () => void;
   }) {
-    this.problems = problems;
+    this.game = new Game({ problems })
     this.result = result;
+    this.counter = new Counter();
     this.changeProblemTextView = changeProblemTextView;
     this.changeTimeView = changeTimeView;
     this.changeScoreView = changeScoreView;
@@ -42,29 +43,28 @@ class State {
   }
 
   onClickStartButton() {
-    if (this.problems.length > 0) {
-      this.toggleButtonDisabled(false);
-      this.result.initialize();
-      this.initializeScore();
-      this.toggleButtonView(false);
-      this.startProblem(0);
-    }
+    this.toggleButtonDisabled(false);
+    this.toggleButtonView(false);
+    this.startNextProblem();
   }
 
   onClickInitializeButton() {
     clearInterval(this.intervalId);
+    this.game.initialize();
+    this.result.initialize();
+
     this.toggleButtonView(true);
     this.toggleButtonDisabled(true);
     this.changeProblemTextView('문제 단어');
+    this.changeScoreView(this.result.getScore());
   }
 
   onEnter(input: string) {
-    const problem = this.problems[this.currentProblemIndex];
-    if (problem.text === input) {
-      this.result.add(problem, this.count);
+    if (this.game.isRight(input)) {
       clearInterval(this.intervalId);
-      if (this.currentProblemIndex + 1 < this.problems.length) {
-        this.startProblem(this.currentProblemIndex + 1);
+      this.result.addRightResult(this.game.getCurrentProblem(), this.counter.getCount());
+      if (this.game.hasNextProblem()) {
+        this.startNextProblem();
       } else {
         this.finish();
       }
@@ -73,48 +73,37 @@ class State {
 
   private onTimeOut() {
     clearInterval(this.intervalId);
-    this.changeScore(this.score - 1);
-    if (this.currentProblemIndex + 1 < this.problems.length) {
-      this.startProblem(this.currentProblemIndex + 1);
+    this.result.addWrongResult();
+    this.changeScoreView(this.result.getScore());
+    if (this.game.hasNextProblem()) {
+      this.startNextProblem();
     } else {
       this.finish();
     }
   }
 
-  private startProblem(index: number) {
-    this.currentProblemIndex = index;
-    const problem = this.problems[this.currentProblemIndex];
-    this.startTimer(problem.second);
-    this.changeProblemTextView(problem.text);
+  private startNextProblem() {
+    this.game.nextProblem();
+    const problem = this.game.getCurrentProblem();
+    this.changeProblemTextView(problem.getText());
+    this.startTimer(problem.getSecond());
   }
 
   private startTimer(count: number) {
-    this.changeTimeCount(count);
+    this.counter.setCount(count);
+    this.changeTimeView(count);
     this.intervalId = setInterval(() => {
-      if (this.count > 0) {
-        this.changeTimeCount(this.count - 1);
-      } else {
+      if (this.counter.isEnd()) {
         this.onTimeOut();
+      } else {
+        this.counter.countDown();
+        this.changeTimeView(this.counter.getCount());
       }
     }, 1000);
   }
 
   private finish() {
     this.routeToResult();
-  }
-
-  private initializeScore() {
-    this.changeScore(this.problems.length);
-  }
-
-  private changeScore(score: number) {
-    this.score = score;
-    this.changeScoreView(score);
-  }
-
-  private changeTimeCount(count: number) {
-    this.count = count;
-    this.changeTimeView(count);
   }
 }
 

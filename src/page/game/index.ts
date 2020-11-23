@@ -1,6 +1,6 @@
-import History from "router/history";
-import Problem from "../../lib/models/problem";
-import Result from "../../lib/Result";
+import History from "lib/router/history";
+import Problem from "lib/problem";
+import Result from "lib/Result";
 import State from "./state";
 import build from './build';
 
@@ -44,6 +44,7 @@ const createGamePageElement = ({ history }: {
   });
 
   const rootElement = build({
+    initialScore: result.getScore(),
     problemTextElement,
     timeElement,
     scoreElement,
