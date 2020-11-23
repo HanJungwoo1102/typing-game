@@ -22,7 +22,7 @@ class App {
     }
   
     if (problems) {
-      const result = new Result();
+      const result = new Result(problems.length);
       const rootElement = document.getElementById('root');
   
       if (rootElement) {

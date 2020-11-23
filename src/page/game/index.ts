@@ -44,6 +44,7 @@ const createGamePageElement = ({ history }: {
   });
 
   const rootElement = build({
+    initialScore: result.getScore(),
     problemTextElement,
     timeElement,
     scoreElement,

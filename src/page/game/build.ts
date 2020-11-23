@@ -1,10 +1,12 @@
 import './index.css';
 
 const build = ({
+  initialScore,
   problemTextElement, timeElement, scoreElement, startButtonElement, initializeButtonElement,
   inputElement,
   onEnter, onClickInitializeButton, onClickStartButton,
 }: {
+  initialScore: number;
   problemTextElement: HTMLElement;
   timeElement: HTMLElement;
   scoreElement: HTMLElement;
@@ -29,7 +31,7 @@ const build = ({
   timerElement.append('남은 시간 : ', timeElement, '초');
 
   const scoreBoardElement = document.createElement('div');
-  scoreElement.append('0');
+  scoreElement.append(`${initialScore}`);
   scoreBoardElement.append('점수 : ', scoreElement, '점')
 
   const problemContainer = document.createElement('section');

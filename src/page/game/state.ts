@@ -35,7 +35,6 @@ class State {
   }) {
     this.game = new Game({ problems })
     this.result = result;
-    this.score = new Score({ score: problems.length });
     this.counter = new Counter();
     this.changeProblemTextView = changeProblemTextView;
     this.changeTimeView = changeTimeView;
@@ -47,24 +46,25 @@ class State {
 
   onClickStartButton() {
     this.toggleButtonDisabled(false);
-    this.result.initialize();
-    this.initializeScore();
     this.toggleButtonView(false);
     this.startNextProblem();
   }
 
   onClickInitializeButton() {
     clearInterval(this.intervalId);
+    this.game.initialize();
+    this.result.initialize();
+
     this.toggleButtonView(true);
     this.toggleButtonDisabled(true);
     this.changeProblemTextView('문제 단어');
-    this.game.initialize();
+    this.changeScoreView(this.result.getScore());
   }
 
   onEnter(input: string) {
     if (this.game.isRight(input)) {
       clearInterval(this.intervalId);
-      this.result.add(this.game.getCurrentProblem(), this.counter.getCount());
+      this.result.addRightResult(this.game.getCurrentProblem(), this.counter.getCount());
       if (this.game.hasNextProblem()) {
         this.startNextProblem();
       } else {
@@ -75,7 +75,8 @@ class State {
 
   private onTimeOut() {
     clearInterval(this.intervalId);
-    this.downScore();
+    this.result.addWrontResult();
+    this.changeScoreView(this.result.getScore());
     if (this.game.hasNextProblem()) {
       this.startNextProblem();
     } else {
@@ -91,38 +92,20 @@ class State {
   }
 
   private startTimer(count: number) {
-    this.initializeCount(count);
+    this.counter.setCount(count);
+    this.changeTimeView(count);
     this.intervalId = setInterval(() => {
       if (this.counter.isEnd()) {
         this.onTimeOut();
       } else {
-        this.downCount();
+        this.counter.countDown();
+        this.changeTimeView(this.counter.getCount());
       }
     }, 1000);
   }
 
   private finish() {
     this.routeToResult();
-  }
-
-  private initializeScore() {
-    this.score.initialize();
-    this.changeScoreView(this.score.getScore());
-  }
-
-  private downScore() {
-    this.score.wrong();
-    this.changeScoreView(this.score.getScore());
-  }
-
-  private initializeCount(count: number) {
-    this.counter.setCount(count);
-    this.changeTimeView(count);
-  }
-
-  private downCount() {
-    this.counter.countDown();
-    this.changeTimeView(this.counter.getCount());
   }
 }
 
