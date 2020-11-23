@@ -53,6 +53,19 @@ describe('result', () => {
     expect(result.getScore()).toBe(0);
   });
 
+  test('result wront right add', () => {
+    const result = new Result(problems.length);
+
+    result.addWrongResult();
+
+    result.addRightResult(problem1, 4);
+
+    result.addRightResult(problem2, 1);
+
+    expect(result.getAvgTime()).toBe(5);
+    expect(result.getScore()).toBe(2);
+  });
+
   test('initialize', () => {
     const result = new Result(problems.length);
 
