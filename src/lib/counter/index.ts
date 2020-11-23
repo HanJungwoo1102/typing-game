@@ -7,7 +7,9 @@ class Counter {
     this.count = count;
   }
   countDown() {
-    this.count -= 1;
+    if (this.count > 0) {
+      this.count -= 1;
+    }
   }
   getCount() {
     return this.count;

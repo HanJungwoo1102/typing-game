@@ -63,8 +63,8 @@ class State {
 
   onEnter(input: string) {
     if (this.game.isRight(input)) {
-      this.result.add(this.game.getCurrentProblem(), this.counter.getCount());
       clearInterval(this.intervalId);
+      this.result.add(this.game.getCurrentProblem(), this.counter.getCount());
       if (this.game.hasNextProblem()) {
         this.startNextProblem();
       } else {
