@@ -1,4 +1,3 @@
-import Score from "lib/score";
 import Game from "lib/game";
 import Problem from "lib/problem";
 import Result from "lib/Result";
@@ -7,7 +6,6 @@ import Counter from "lib/counter";
 class State {
   private counter: Counter;
   private intervalId: NodeJS.Timeout;
-  private score: Score;
   private result: Result;
   private game: Game;
   
@@ -75,7 +73,7 @@ class State {
 
   private onTimeOut() {
     clearInterval(this.intervalId);
-    this.result.addWrontResult();
+    this.result.addWrongResult();
     this.changeScoreView(this.result.getScore());
     if (this.game.hasNextProblem()) {
       this.startNextProblem();

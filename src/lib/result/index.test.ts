@@ -37,17 +37,17 @@ describe('result', () => {
   test('reulst add wrong', () => {
     const result = new Result(problems.length);
 
-    result.addWrontResult();
+    result.addWrongResult();
 
     expect(result.getAvgTime()).toBe(0);
     expect(result.getScore()).toBe(2);
 
-    result.addWrontResult();
+    result.addWrongResult();
 
     expect(result.getAvgTime()).toBe(0);
     expect(result.getScore()).toBe(1);
 
-    result.addWrontResult();
+    result.addWrongResult();
 
     expect(result.getAvgTime()).toBe(0);
     expect(result.getScore()).toBe(0);

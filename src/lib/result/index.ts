@@ -15,7 +15,7 @@ class Result {
     this.times.push(proble.getSecond() - time);
   }
   
-  addWrontResult() {
+  addWrongResult() {
     this.score -= 1;
   }
 
