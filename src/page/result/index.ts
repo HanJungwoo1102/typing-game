@@ -1,17 +1,20 @@
+import Result from "lib/Result";
 import History from "lib/router/history";
 import build from "./build";
 
 const createResultPageElement =  ({ history }: {
   history: History
-}) => ({ avgTime, score }: {
-  avgTime: number;
-  score: number;
+}) => ({ result }: {
+  result: Result;
 }) => {
 
   const rootElement = build({
-    avgTime,
-    score,
-    onClickRestartButton: () => history.push('game'),
+    avgTime: result.getAvgTime(),
+    score: result.getScore(),
+    onClickRestartButton: () => {
+      result.initialize();
+      history.push('game');
+    },
   });
 
   return rootElement;

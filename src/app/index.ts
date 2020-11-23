@@ -39,8 +39,7 @@ class App {
             new Route({
               path: 'result',
               createElement: ({ history }) => createResultPageElement({ history })({
-                avgTime: result.getAvgTime(),
-                score: result.getScore(),
+                result,
               }),
             }),
           ],
