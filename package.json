@@ -4,7 +4,7 @@
   "description": "typing game",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack serve",
+    "start": "webpack serve",
     "build": "webpack",
     "test": "jest"
   },
